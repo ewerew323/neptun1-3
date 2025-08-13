@@ -1750,3 +1750,6 @@ def export_tracks():
         writer.writerow(t)
     csv_data = output.getvalue()
     return (csv_data, 200, {'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename=tracks.csv'})
+
+if __name__ == '__main__':
+    app.run()
