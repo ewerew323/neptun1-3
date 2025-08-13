@@ -1,0 +1,13 @@
+spacy==3.7.2
+openai
+sentence-transformers
+scikit-learn
+flask
+gunicorn
+langdetect==1.0.9
+telethon
+aiohttp
+unidecode
+deep-translator
+googlemaps
+pytz

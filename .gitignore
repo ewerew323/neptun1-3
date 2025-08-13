@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+*.log
+geocoding_cache.json
+opencage_cache.json
+not_found_places.log
+anon.session*
+node_modules/
