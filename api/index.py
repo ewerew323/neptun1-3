@@ -9,7 +9,6 @@ from os import environ
 
 # Configure logging
 logging.basicConfig(
-    filename='app.log',
     level=logging.INFO,
     format='%(asctime)s %(levelname)s %(message)s'
 )
@@ -109,9 +108,9 @@ class LocationExtractor:
 # Initialize location extractor
 location_extractor = LocationExtractor()
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return jsonify({"status": "ok", "message": "Server is running"})
 
 @app.route('/extract_locations', methods=['POST'])
 def extract_locations():
@@ -129,9 +128,3 @@ def health():
     Healthcheck endpoint
     """
     return jsonify({"status": "ok", "timestamp": datetime.now().isoformat()})
-
-# This is for Vercel serverless deployment
-app.debug = True
-
-# Required for Vercel
-app = app.wsgi_app
