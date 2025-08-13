@@ -1,3 +1,4 @@
+# Flask application for tracking and mapping
 # Центры областей и районов Украины
 OBLAST_CENTERS = {
     # Винницкая область
