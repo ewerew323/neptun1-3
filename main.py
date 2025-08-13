@@ -1752,5 +1752,16 @@ def export_tracks():
     csv_data = output.getvalue()
     return (csv_data, 200, {'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename=tracks.csv'})
 
+# Add error handler for 500 errors
+@app.errorhandler(500)
+def handle_500_error(error):
+    return jsonify({
+        'error': 'Internal Server Error',
+        'message': str(error)
+    }), 500
+
 if __name__ == '__main__':
     app.run()
+
+# This is for Vercel serverless deployment
+app.debug = True
