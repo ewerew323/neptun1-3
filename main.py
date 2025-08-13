@@ -177,12 +177,19 @@ import ssl
 import googlemaps
 import threading
 from unidecode import unidecode
-import spacy
 import os
 from os import environ
 import math
 import pickle
 import hashlib
+
+# Initialize spacy with error handling
+try:
+    import spacy
+    nlp = spacy.load('en_core_web_sm')
+except ImportError:
+    print("Warning: spacy or model not available, some features may be limited")
+    nlp = None
 import logging
 import random
 import functools
