@@ -183,13 +183,13 @@ import math
 import pickle
 import hashlib
 
-# Initialize spacy with error handling
-try:
-    import spacy
-    nlp = spacy.load('en_core_web_sm')
-except ImportError:
-    print("Warning: spacy or model not available, some features may be limited")
-    nlp = None
+# Dummy NLP functions for compatibility
+class DummyNLP:
+    def __call__(self, text):
+        return []
+
+nlp = DummyNLP()
+nlp_uk = DummyNLP()
 import logging
 import random
 import functools
@@ -448,13 +448,8 @@ DNZP_PRIORITY = {
     "заводський": "Запорізька область",
 }
 
-# Загрузка spaCy модели
-try:
-    nlp_uk = spacy.load("uk_core_news_sm")
-    logger.info("spaCy Ukrainian model loaded successfully")
-except Exception as e:
-    nlp_uk = None
-    logger.warning(f"spaCy Ukrainian model not found: {e}. Run: python -m spacy download uk_core_news_sm")
+# NLP functionality is disabled
+logger.info("NLP functionality is disabled")
 
 # Загрузка HuggingFace NER pipeline (украинский/русский)
 try:
