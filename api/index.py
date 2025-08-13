@@ -1,26 +1,11 @@
-# Flask application for tracking and mapping
-from datetime import datetime, timedelta, timezone
 from flask import Flask, render_template, jsonify, request
-from telethon import TelegramClient
-from telethon.tl.functions.messages import GetHistoryRequest
+from datetime import datetime, timedelta, timezone
 import re
-import aiohttp
-import ssl
-import googlemaps
-import threading
-from unidecode import unidecode
-import os
-from os import environ
-import math
-import pickle
-import hashlib
 import json
 import logging
-from deep_translator import GoogleTranslator
-from langdetect import detect
-import csv
-from io import StringIO
 import pytz
+import os
+from os import environ
 
 # Configure logging
 logging.basicConfig(
@@ -124,17 +109,6 @@ class LocationExtractor:
 # Initialize location extractor
 location_extractor = LocationExtractor()
 
-# Load configuration
-api_id = environ.get('API_ID')
-api_hash = environ.get('API_HASH')
-GOOGLE_MAPS_API_KEY = environ.get('GOOGLE_MAPS_API_KEY')
-
-# Initialize Google Maps client
-gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY) if GOOGLE_MAPS_API_KEY else None
-
-# Initialize Telegram client
-client = TelegramClient('anon', api_id, api_hash)
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -149,32 +123,15 @@ def extract_locations():
         logger.error(f"Error extracting locations: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
-@app.route('/geocode', methods=['POST'])
-async def geocode():
-    try:
-        location = request.json.get('location')
-        if not location:
-            return jsonify({"error": "Location is required"}), 400
+@app.route('/health')
+def health():
+    """
+    Healthcheck endpoint
+    """
+    return jsonify({"status": "ok", "timestamp": datetime.now().isoformat()})
 
-        if not gmaps:
-            return jsonify({"error": "Google Maps API not configured"}), 500
+# This is for Vercel serverless deployment
+app.debug = True
 
-        result = gmaps.geocode(location)
-        if result:
-            location_data = result[0]
-            lat = location_data['geometry']['location']['lat']
-            lng = location_data['geometry']['location']['lng']
-            formatted_address = location_data['formatted_address']
-            return jsonify({
-                "lat": lat,
-                "lng": lng,
-                "formatted_address": formatted_address
-            })
-        else:
-            return jsonify({"error": f"Location '{location}' not found"}), 404
-    except Exception as e:
-        logger.error(f"Error geocoding location: {str(e)}")
-        return jsonify({"error": str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(environ.get('PORT', 5000)))
+# Required for Vercel
+app = app.wsgi_app
