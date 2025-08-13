@@ -1,0 +1,9 @@
+flask
+gunicorn
+telethon
+aiohttp
+unidecode
+deep-translator
+googlemaps
+pytz
+langdetect==1.0.9
